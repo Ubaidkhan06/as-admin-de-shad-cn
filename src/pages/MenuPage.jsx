@@ -4,7 +4,7 @@ import DishCard from "@/components/Cards/DishCard";
 
 const MenuPage = () => {
   return (
-    <div className="flex justify-center items-stretch gap-3 p-8 flex-wrap">
+    <div className="flex justify-center items-stretch gap-6 p-8 flex-wrap">
       <AddDishCard />
       <DishCard />
       <DishCard />

@@ -33,7 +33,7 @@ import * as z from "zod";
 import { useToast } from "../ui/use-toast";
 import { useState } from "react";
 
-const Modal = ({ trigger, icon }) => {
+const Modal = ({ trigger, icon, add }) => {
   // const router = useRouter();'
 
   const [open, setOpen] = useState(false);
@@ -80,7 +80,7 @@ const Modal = ({ trigger, icon }) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Dish</DialogTitle>
+          <DialogTitle>{add ? "Add" : "Edit"} Dish</DialogTitle>
         </DialogHeader>
 
         {/* <DialogDescription> */}
@@ -138,7 +138,7 @@ const Modal = ({ trigger, icon }) => {
                     <FormLabel>Image</FormLabel>
                     <FormControl>
                       <Input
-                      tabIndex={0}
+                        tabIndex={0}
                         type="file"
                         placeholder="Choose a file"
                         {...field}

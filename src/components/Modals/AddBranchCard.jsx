@@ -42,7 +42,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Pencil } from "lucide-react";
 
-const AddBranchCard = () => {
+const AddBranchCard = ({ edit }) => {
   const [open, setOpen] = useState(false);
 
   const { toast } = useToast();
@@ -79,7 +79,6 @@ const AddBranchCard = () => {
     setOpen(false);
   }
 
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
@@ -98,7 +97,7 @@ const AddBranchCard = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Branch</DialogTitle>
+          <DialogTitle>{edit ? "Edit" : "Add"} Branch</DialogTitle>
           <DialogDescription>Fill in the details</DialogDescription>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">

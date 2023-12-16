@@ -17,7 +17,7 @@ const AddDishCard = () => {
         {/* <CardDescription>Fill in the Details</CardDescription> */}
       {/* </CardHeader> */}
       <CardContent className="h-full flex justify-center items-center w-full">
-        <Modal icon trigger={<PlusIcon size={50} />} />
+        <Modal add icon trigger={<PlusIcon size={50} />} />
       </CardContent>
     </Card>
   );
