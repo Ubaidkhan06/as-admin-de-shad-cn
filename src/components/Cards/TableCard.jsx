@@ -109,7 +109,7 @@ const TableCard = ({ image, title }) => {
                     </FormControl>
                     <SelectContent>
                       {updateValues?.map((ele, idx) => (
-                        <SelectItem value={ele}>{ele}</SelectItem>
+                        <SelectItem key={idx} value={ele}>{ele}</SelectItem>
                       ))}
                     </SelectContent>
 

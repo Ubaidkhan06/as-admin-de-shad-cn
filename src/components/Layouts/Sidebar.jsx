@@ -36,7 +36,7 @@ const Sidebar = () => {
       <CardContent>
         <ul className="flex flex-col gap-4">
           {sidebaritems?.map((ele, idx) => (
-            <Link href={ele?.link}>
+            <Link key={idx} href={ele?.link}>
               <li
                 className={`flex ${
                   pathName?.endsWith(ele?.link)
