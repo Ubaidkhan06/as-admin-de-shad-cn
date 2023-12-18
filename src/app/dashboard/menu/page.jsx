@@ -1,3 +1,5 @@
+"use client"
+
 import MenuPage from "@/components/pages/MenuPage";
 
 const Menu = () => {

@@ -48,7 +48,7 @@ const Modal = ({ trigger, icon, add, cuisines, dishMutate }) => {
 
   const formSchema = z.object({
     name: z.string().max(25)?.min(1, "Required"),
-    // image: z.instanceof(File).refine((val) => !val, "Required"),
+    image: z.instanceof(File).refine((val) => !val, "Required"),
     price: z.string()?.min(1, "Required"),
     cuisine: z.string()?.min(1, "Required"),
     foodType: z.string()?.min(1, "Required"),
@@ -61,7 +61,7 @@ const Modal = ({ trigger, icon, add, cuisines, dishMutate }) => {
       name: "",
       cuisine: "",
       foodType: "",
-      // image: new File([], ""),
+      image: new File([], ""),
       volume: "",
       price: "",
     },
@@ -72,7 +72,7 @@ const Modal = ({ trigger, icon, add, cuisines, dishMutate }) => {
 
     const formData = new FormData();
     formData?.append("name", values?.name);
-    // formData?.append("image", values?.image);
+    formData?.append("image", values?.image);
     formData?.append("price", values?.price);
     formData?.append("volume", values?.volume);
     formData?.append("cuisine", values?.cuisine);
@@ -185,7 +185,7 @@ const Modal = ({ trigger, icon, add, cuisines, dishMutate }) => {
               )}
             />
             <div className="flex items-center gap-3">
-              {/* <FormField
+              <FormField
                 control={form.control}
                 name="image"
                 render={({ field }) => (
@@ -210,7 +210,7 @@ const Modal = ({ trigger, icon, add, cuisines, dishMutate }) => {
                     </FormDescription>
                   </FormItem>
                 )}
-              /> */}
+              />
               <FormField
                 control={form.control}
                 name="foodType"
