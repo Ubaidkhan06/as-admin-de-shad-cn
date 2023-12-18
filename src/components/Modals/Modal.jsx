@@ -48,7 +48,7 @@ const Modal = ({ trigger, icon, add, cuisines, dishMutate }) => {
 
   const formSchema = z.object({
     name: z.string().max(25)?.min(1, "Required"),
-    image: z.instanceof(File).refine((val) => !val, "Required"),
+    image: z.any().refine(val=> !val?.name, "Required"),
     price: z.string()?.min(1, "Required"),
     cuisine: z.string()?.min(1, "Required"),
     foodType: z.string()?.min(1, "Required"),
