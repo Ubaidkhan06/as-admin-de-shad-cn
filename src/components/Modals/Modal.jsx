@@ -61,7 +61,7 @@ const Modal = ({ trigger, icon, add, cuisines, dishMutate }) => {
       name: "",
       cuisine: "",
       foodType: "",
-      image: new File([], ""),
+      image: "",
       volume: "",
       price: "",
     },
