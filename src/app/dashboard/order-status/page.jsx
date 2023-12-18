@@ -1,5 +1,5 @@
 
-import OrderStatusPage from "@/pages/OrderStatusPage";
+import OrderStatusPage from "@/components/pages/OrderStatusPage";
 
 const OrderStatus = () => {
   return <OrderStatusPage />;

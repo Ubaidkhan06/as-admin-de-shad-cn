@@ -1,4 +1,4 @@
-import BranchesPage from "@/pages/BranchesPage";
+import BranchesPage from "@/components/pages/BranchesPage";
 
 const Branches = () => {
   return <BranchesPage />;

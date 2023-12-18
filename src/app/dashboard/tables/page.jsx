@@ -1,5 +1,5 @@
 import TableCard from "@/components/Cards/TableCard";
-import TablesPage from "@/pages/TablesPage";
+import TablesPage from "@/components/pages/TablesPage";
 
 const Tables = () => {
   return <TablesPage />;
