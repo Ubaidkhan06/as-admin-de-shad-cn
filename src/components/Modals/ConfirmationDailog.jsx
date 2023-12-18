@@ -11,11 +11,16 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 
-const ConfirmationDailog = ({ dailogTrigger, icon, confirmFunction }) => {
+const ConfirmationDailog = ({
+  dailogTrigger,
+  size,
+  variant,
+  confirmFunction,
+}) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline" size={icon ? "icon" : "sm"}>
+        <Button variant={variant || "default"} size={size || "default"}>
           {dailogTrigger}
         </Button>
       </AlertDialogTrigger>

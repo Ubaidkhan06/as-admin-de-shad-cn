@@ -1,29 +1,24 @@
 "use client";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { sidebaritems } from "@/utils/sidebaritems";
-import {
-  HomeIcon,
-  LayoutDashboard,
-  MenuIcon,
-  PieChart,
-  SubscriptIcon,
-  Table,
-  User2,
-} from "lucide-react";
+import { getCookie } from "cookies-next";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useMemo } from "react";
 
 const Sidebar = () => {
+  const userType = getCookie("userType");
+
   const pathName = usePathname();
-  console.log("", pathName);
+
+  const filteredSidebarItems = useMemo(() => {
+    if (userType != "Owner") {
+      return sidebaritems?.filter((ele) => ele?.title != "Home");
+    } else {
+      return sidebaritems;
+    }
+  }, [userType]);
 
   return (
     <Card className="min-w-[200px] rounded-l-none  h-screen flex flex-col items-center bg-primary">
@@ -35,7 +30,7 @@ const Sidebar = () => {
       </CardHeader>
       <CardContent>
         <ul className="flex flex-col gap-4">
-          {sidebaritems?.map((ele, idx) => (
+          {filteredSidebarItems?.map((ele, idx) => (
             <Link key={idx} href={ele?.link}>
               <li
                 className={`flex ${

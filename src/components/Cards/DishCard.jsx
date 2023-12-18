@@ -6,6 +6,8 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import { Switch } from "@/components/ui/switch";
 
 import Image from "next/image";
@@ -15,35 +17,66 @@ import { useToast } from "../ui/use-toast";
 import ConfirmationDailog from "../Modals/ConfirmationDailog";
 import Modal from "../Modals/Modal";
 import { Separator } from "../ui/separator";
+import axios from "axios";
+import { getCookie } from "cookies-next";
+import { getConfigSwr } from "@/utils/getConfig";
 
-const DishCard = ({ image, title }) => {
+const DishCard = ({ image, name, price, rating, id, dishMutate }) => {
   const { toast } = useToast();
+  const token = getCookie("accessToken");
+  const config = getConfigSwr(token);
+
+  console.log(id);
+
+  const handleDelete = async () => {
+    try {
+      const res = await axios?.delete(
+        `${process?.env?.NEXT_PUBLIC_API_ENDPOINT}/api/dish/${id}/`,
+        config
+      );
+      dishMutate();
+      toast({
+        title: "Success",
+        description: "Dish deleted succesfully",
+        variant: "success",
+      });
+      console.log(res?.data);
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "Dish deleted succesfully",
+        variant: "destructive",
+      });
+      console.log(err);
+    }
+  };
 
   return (
-    <Card className="">
+    <Card className="max-w-min">
       <CardHeader className="p-0">
-        <div>
-          <Image
-            src={"/images/dish.webp"}
-            width={100}
-            height={100}
+        <div className="w-full">
+          <img src={image} className="object-cover h-40 w-full" />
+          {/* <Image
+            src={image}
+            width={80}
+            height={80}
             alt="logo-1"
-            className="w-full object-cover h-full"
-          />
+            className="w-full object-cover h-44"
+          /> */}
         </div>
       </CardHeader>
       <CardContent className="mt-2">
         <div className="space-y-2">
-          <h1>Chicken Schezwan Noodles</h1>
+          <h1>{name}</h1>
           <Separator />
           <div className="flex justify-between w-full">
             <div>
-              <p>&#x20B9; 250</p>
+              <p>&#x20B9; {price}</p>
             </div>
             <Separator orientation="vertical" className="h-5" />
             <div>
               <span className="flex items-center gap-2">
-                4.5 <Star size={18} />
+                {rating?.toFixed(1)} <Star size={18} />
               </span>
             </div>
           </div>
@@ -51,7 +84,7 @@ const DishCard = ({ image, title }) => {
         </div>
       </CardContent>
       <CardFooter className="">
-        <div className="flex w-full items-center justify-between">
+        <div className="flex w-full items-center justify-between gap-2">
           <Button
             size="sm"
             variant="outline"
@@ -67,15 +100,9 @@ const DishCard = ({ image, title }) => {
           </Button>
           <Modal trigger={<Pencil />} />
           <ConfirmationDailog
-            
+            variant={"outline"}
             dailogTrigger={<Trash />}
-            confirmFunction={(e) =>
-              toast({
-                title: "Deleted",
-                description: "Dish deleted succesfully",
-                variant: "destructive",
-              })
-            }
+            confirmFunction={handleDelete}
           />
           <Switch />
         </div>

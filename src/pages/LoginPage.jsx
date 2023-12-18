@@ -27,9 +27,13 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { CheckCircle } from "lucide-react";
 import Link from "next/link";
+import axios from "axios";
+import { setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 export function CardWithForm() {
   const { toast } = useToast();
+  const router = useRouter();
 
   const formSchema = z.object({
     email: z.string().email("Enter a valid email").max(50),
@@ -45,20 +49,45 @@ export function CardWithForm() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values) {
+  async function onSubmit(values) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+
+    try {
+      const res = await axios?.post(
+        `${process?.env?.NEXT_PUBLIC_API_ENDPOINT}/auth/login/`,
+        values
+      );
+      console.log(res?.data);
+      setCookie("accessToken", res?.data?.access, { sameSite: "strict" });
+      setCookie("refreshToken", res?.data?.refresh, { sameSite: "strict" });
+      setCookie("userType", res?.data?.type, { sameSite: "strict" });
+      setCookie("branchId", res?.data?.branch_id, { sameSite: "strict" });
+      toast({
+        title: (
+          <div className="flex items-center gap-2">
+            <CheckCircle />
+            <span>Success</span>
+          </div>
+        ),
+        description: "Logged in succesfully",
+        variant: "success",
+      });
+      if (res?.data?.type == "Manager") {
+        router?.push("/dashboard");
+      } else if (res?.data?.type == "Owner") {
+        router?.push("/dashboard/home");
+      }
+    } catch (err) {
+      console.log(err);
+      toast({
+        title: "Error",
+        description: "Something went wrong.",
+        variant: "destructive",
+      });
+    }
+
     console.log(values);
-    toast({
-      title: (
-        <div className="flex items-center gap-2">
-          <CheckCircle />
-          <span>Success</span>
-        </div>
-      ),
-      description: "Logged in succesfully",
-      variant: "success",
-    });
   }
 
   return (

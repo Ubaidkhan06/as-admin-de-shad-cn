@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "../ui/separator";
-import AddBranchCard from "../Modals/AddBranchCard";
+import AddBranchCard from "../Modals/AddBranchModal";
 
 const BranchCard = () => {
   return (

@@ -35,7 +35,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-const TableCard = ({ image, title }) => {
+const TableCard = ({ tableName, guestName, orderId, tableStatus }) => {
   const { toast } = useToast();
 
   const updateValues = [
@@ -62,7 +62,6 @@ const TableCard = ({ image, title }) => {
       title: "Status updated succesfully",
       description: JSON?.stringify(values),
       variant: "success",
-    
     });
     console.log(values);
   };
@@ -70,23 +69,32 @@ const TableCard = ({ image, title }) => {
   return (
     <Card className="">
       <CardHeader>
-        <CardTitle>Table 420</CardTitle>
+        <CardTitle className="capitalize">{tableName}</CardTitle>
         <CardDescription>
           Current Status :-{" "}
-          <span className={badgeVariants({ variant: "destructive" })}>
-            Occupied
+          <span
+            className={badgeVariants({
+              variant:
+                tableStatus == "occupied"
+                  ? "destructive"
+                  : tableStatus == "food delivered"
+                  ? "secondary"
+                  : "success",
+            })}
+          >
+            {tableStatus}
           </span>{" "}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
           <p className="text-muted-foreground">Guest Name</p>
-          <p>Ubaid Khan</p>
+          <p>{guestName || "N/A"}</p>
           <Separator />
         </div>
         <div>
           <p className="text-muted-foreground">Order ID</p>
-          <p>Ordr_224456</p>
+          <p>{orderId || "N/A"}</p>
           <Separator />
         </div>
       </CardContent>
@@ -109,7 +117,9 @@ const TableCard = ({ image, title }) => {
                     </FormControl>
                     <SelectContent>
                       {updateValues?.map((ele, idx) => (
-                        <SelectItem key={idx} value={ele}>{ele}</SelectItem>
+                        <SelectItem key={idx} value={ele}>
+                          {ele}
+                        </SelectItem>
                       ))}
                     </SelectContent>
 

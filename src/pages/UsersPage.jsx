@@ -1,3 +1,5 @@
+"use client";
+
 import AddUserModal from "@/components/Modals/AddUserModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,9 +22,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { fetcher } from "@/utils/fetcher";
+import { getConfigSwr } from "@/utils/getConfig";
+import { getCookie } from "cookies-next";
 import { User, UserCircle } from "lucide-react";
+import useSWR from "swr";
 
 const UsersPage = () => {
+  const branchId = getCookie("branchId");
+  const token = getCookie("accessToken");
+  const config = getConfigSwr(token);
+
+  const { data, isLoading, error } = useSWR(
+    [
+      `${process?.env?.NEXT_PUBLIC_API_ENDPOINT}/auth/user/${branchId}/`,
+      config,
+    ],
+    ([url, config]) => fetcher(url, config)
+  );
+
+  console.log(data, error);
+
   return (
     <div className="p-8">
       <div className="flex items-end gap-4">
@@ -59,52 +79,30 @@ const UsersPage = () => {
             <TableHead>User</TableHead>
             <TableHead>Role</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Branch</TableHead>
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="font-medium gap-4 flex items-center">
-              <UserCircle size={35} strokeWidth={1.5} />
-              <div>
-                <p>Ubaid</p>
-                <p>ubaid@email.com</p>
-              </div>
-            </TableCell>
-            <TableCell>Owner</TableCell>
-            <TableCell>Activated</TableCell>
-            <TableCell className="text-right">
-              <Button size="sm">Remove User</Button>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium gap-4 flex items-center">
-              <UserCircle size={35} strokeWidth={1.5} />
-              <div>
-                <p>Ubaid</p>
-                <p>ubaid@email.com</p>
-              </div>
-            </TableCell>
-            <TableCell>Owner</TableCell>
-            <TableCell>Activated</TableCell>
-            <TableCell className="text-right">
-              <Button size="sm">Remove User</Button>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium gap-4 flex items-center">
-              <UserCircle size={35} strokeWidth={1.5} />
-              <div>
-                <p>Ubaid</p>
-                <p>ubaid@email.com</p>
-              </div>
-            </TableCell>
-            <TableCell>Owner</TableCell>
-            <TableCell>Activated</TableCell>
-            <TableCell className="text-right">
-              <Button size="sm">Remove User</Button>
-            </TableCell>
-          </TableRow>
+          {data?.map((ele, idx) => (
+            <TableRow key={idx}>
+              <TableCell className="font-medium gap-4 flex items-center">
+                <UserCircle size={35} strokeWidth={1.5} />
+                <div>
+                  <p>{ele?.username}</p>
+                  <p>u{ele?.email}</p>
+                </div>
+              </TableCell>
+              <TableCell>{ele?.type}</TableCell>
+              <TableCell>
+                {ele?.is_active ? "Activated" : "Not Active"}
+              </TableCell>
+              <TableCell>{ele?.branch?.name}</TableCell>
+              <TableCell className="text-right">
+                <Button size="sm">Remove User</Button>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>

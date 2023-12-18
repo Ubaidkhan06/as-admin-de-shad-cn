@@ -1,5 +1,5 @@
 import BranchCard from "@/components/Cards/BranchCard";
-import AddBranchCard from "@/components/Modals/AddBranchCard";
+import AddBranchCard from "@/components/Modals/AddBranchModal";
 import MenuPage from "@/pages/MenuPage";
 import { Pencil } from "lucide-react";
 

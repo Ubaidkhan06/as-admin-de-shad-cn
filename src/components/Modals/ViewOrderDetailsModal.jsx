@@ -14,9 +14,22 @@ import { useState } from "react";
 import { Separator } from "../ui/separator";
 import Image from "next/image";
 import { ScrollArea } from "../ui/scroll-area";
+import useSWR from "swr";
+import { getCookie } from "cookies-next";
+import { getConfigSwr } from "@/utils/getConfig";
+import { fetcher } from "@/utils/fetcher";
 
 const ViewOrderDetails = ({ trigger, icon, link }) => {
   const [open, setOpen] = useState(false);
+  const token = getCookie("accessToken");
+  const config = getConfigSwr(token);
+
+  const { data, isLoading, error } = useSWR(
+    [`${process?.env?.NEXT_PUBLIC_API_ENDPOINT}/api/order/${trigger}/`, config],
+    ([url, config]) => fetcher(url, config)
+  );
+
+  console.log(data, error);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -37,64 +50,44 @@ const ViewOrderDetails = ({ trigger, icon, link }) => {
           <div className="flex items-center justify-between gap-10">
             <div className="flex-1">
               <p className="text-muted-foreground">Table</p>
-              <p>Table 1</p>
+              <p>{data?.table?.name}</p>
               <Separator />
             </div>
             <div className="flex-1">
               <p className="text-muted-foreground">Order ID</p>
-              <p>Order_7998</p>
+              <p>{data?.order_id}</p>
               <Separator />
             </div>
           </div>
           <div className="flex items-center justify-between gap-10">
             <div className="flex-1">
               <p className="text-muted-foreground">Customer Name</p>
-              <p>John Doe</p>
+              <p>{data?.guest_name  }</p>
               <Separator />
             </div>
             <div className="flex-1">
               <p className="text-muted-foreground">Order Status</p>
-              <p>Booked</p>
+              <p>{data?.order_status}</p>
               <Separator />
             </div>
           </div>
           <div>
             <p className="text-muted-foreground">Items Ordered</p>
             <ScrollArea className="h-44 p-2">
-              <div className="flex items-center justify-between mt-2">
-                <Image
-                  src={"/images/dish.webp"}
-                  width={70}
-                  height={70}
-                  alt="dist"
-                />
-                <p>Masala Dosa</p>
-                <p>Rs 250</p>
-              </div>
-              <div className="flex items-center justify-between mt-2">
-                <Image
-                  src={"/images/dish.webp"}
-                  width={70}
-                  height={70}
-                  alt="dist"
-                />
-                <p>Masala Dosa</p>
-                <p>Rs 250</p>
-              </div>
-              <div className="flex items-center justify-between mt-2">
-                <Image
-                  src={"/images/dish.webp"}
-                  width={70}
-                  height={70}
-                  alt="dist"
-                />
-                <p>Masala Dosa</p>
-                <p>Rs 250</p>
-              </div>
+              {data?.order_items?.map(({ dish }, idx) => (
+                <div
+                  className="flex items-center justify-between mt-2"
+                  key={idx}
+                >
+                  <img src={dish?.image} width={70} height={70} alt="dist" className="object-cover h-10 w-14" />
+                  <p>{dish?.name}</p>
+                  <p>Rs {dish?.price}</p>
+                </div>
+              ))}
             </ScrollArea>
             <div className="flex items-center justify-between bg-accent text-accent-foreground p-2">
               <p>Total Amount</p>
-              <p>Rs 1000</p>
+              <p>Rs {data?.amount}</p>
             </div>
           </div>
         </div>

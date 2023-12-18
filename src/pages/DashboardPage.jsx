@@ -1,12 +1,10 @@
 "use client";
-
-import AddDishCard from "@/components/Cards/AddDishCard";
-import DishCard from "@/components/Cards/DishCard";
+import { Overview } from "@/components/Overview";
 
 const DashboardPage = () => {
   return (
     <div className="flex flex-wrap justify-center gap-6 p-8">
-      Charts
+      <Overview />
     </div>
   );
 };
